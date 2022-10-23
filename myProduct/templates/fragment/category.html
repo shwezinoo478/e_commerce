@@ -1,0 +1,56 @@
+<div class="row">
+
+<ul class="list-group list-group-flush list-group-horizontal " style="overflow-x:auto; margin-left:21px;margin-top:12px;"  id="category_list">
+    <li >
+        <div >
+            <a style="background-color:#ffb906;color:white;margin-left:2px;margin-bottom:3px;" 
+            class="btn btn-secondary link-light border-0" href="{% url 'home_view' %}" role="button" id="btn_all">
+              All
+            </a>
+            
+        </div>
+    </li>
+
+</ul>
+</div>
+
+<script type="text/javascript">
+    
+    async function load_category(){
+        const list = document.getElementById("category_list");
+        try{
+            const response = await fetch("{% url 'get_category_item' %}")
+            const data = await response.json();
+            var CID = document.getElementById('cName').value;
+            Object.keys(data).forEach(val => {
+                var cStyle = "background-color:#ffb906;color:white;margin-left:2px;margin-bottom:3px;white-space: nowrap;max-height: 22ch;";
+                if(CID == "all"){
+                    var cStyle_all = "background-color:#bf9f2796;color:#ffb906;border-bottom: 6px solid #e7791b;margin-left:2px;margin-bottom:3px;white-space: nowrap;max-height: 22ch;"
+                    document.getElementById('btn_all').style.cssText=cStyle_all
+                }
+                else if(CID == data[val]){
+                    cStyle = "background-color:#dbbd2c40;color:#ffb906;border-bottom: 6px solid #e7791b;margin-left:2px;margin-bottom:3px;white-space: nowrap;max-height: 22ch;"
+                    
+                }
+                const item = document.createElement('a');
+                console.log(item.innerHTML)
+                item.href = "{% url 'home_view' %}?category=" +data[val]
+                item.className = "btn"
+                item.style.cssText = cStyle
+                item.innerHTML = val
+                list.append(item)
+                
+              });
+           
+        }catch (error){
+            alert (error);
+        }
+    }
+    window.addEventListener('load' , (e)=>{
+        load_category();
+    })
+   
+</script>
+    
+
+    

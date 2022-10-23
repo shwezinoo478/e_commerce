@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.2/css/fontawesome.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/1ee74799e7.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        {% comment %} <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> {% endcomment %}
+        <title>
+            Shopping Time 
+        </title>
+    </head>
+    <body >
+        <div class="row bg-warning " style="padding-top:11px;">
+            <div class=" col-1" style="margin-left:23px;">
+                    <img class="img-fluid d-lg-block  d-sm-flex rounded-circle" style="width:130px;height:70px;" id ="logo_pic" src="https://freepikpsd.com/file/2019/10/logo-design-png-1-Transparent-Images.png">
+            </div>
+            <div class="col-9 pt-3">
+                {% block search_bar_drop %}
+                    {% include 'fragment/search.html' %}
+                {% endblock search_bar_drop %}
+                
+            </div>
+            <div class="col-1 pt-2 " >
+                <div class="btn btn-outline-light btn-bg-light border-0 border-left-0 position-relative"
+                 style="margin-left:23px;padding-left:10px;" 
+                 onclick="location.href = '{% url 'cartData' %}'"> 
+                    <i class="fa-solid fa-cart-shopping position-relative ">   
+                        <span class="badge rounded-pill bg-light text-dark position-absolute top-12 start-50 translate-middle" value="0" style="font-size:9px;color:yellow;margin-left:18px;">{{count_cart}}</span>             
+                    </i>
+                    <div class="text " style="font-size:12px" >In cart</div>
+                </div>
+                
+            </div>
+            <div class="col pt-2">
+                {% if request.user.is_authenticated %}
+                <div id="profile_login" >
+                    <button type="button" class="btn btn-outline-light btn-bg-dark border 
+                        border-0 border-left-0 mb-3 " onclick="OpenModal()"  > 
+                        <i class="fa-solid fa-user"></i></button>
+
+                    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document" style="position: fixed;
+                        margin: auto;
+                        width: 320px;
+                        height: 100%;
+                        top:80px;
+                        right: 0px;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title text-warning " id="exampleModalLongTitle"><em>{{request.user.username}}</h5>
+                                <button type="button" class="close btn-secondary link-light border-0" data-dismiss="modal" aria-label="Close" 
+                                onclick="CloseModal()" style="background-color:#ffb906;color:white;margin-left:2px;margin-bottom:3px;">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="modal-title text-warning "> {{request.user.email}}</div></em>
+                            </div>
+                            <div class="modal-footer " style="text-align:center">
+                                <button type="button" class="btn btn-secondary link-light border-0" style="background-color:#ffb906;color:white;margin-left:2px;margin-bottom:3px;"
+                                 onclick="CloseModal()">Close</button>
+                                <button type="button" class="btn btn-secondary link-light border-0" style="background-color:#ffb906;color:white;margin-left:2px;margin-bottom:3px;"
+                                onclick="location.href = '{% url 'logout' %}' ">
+                                    Log Out</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+             
+                </div>
+                {% else %}
+                    <div id="profile_login" >
+                        <button class="btn btn-outline-light btn-bg-dark border border-0 border-left-0 mb-3"
+                            onclick="location.href = '{% url 'register' %}' ">
+                            <i class="fa-solid fa-user"></i> Login</button>
+                    </div>
+                {% endif %}
+            </div>
+            
+        </div>
+        <div class="row " >
+            <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                  <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                  <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                  <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                </div>
+                <div class="carousel-inner">
+                  <div class="carousel-item active" data-bs-interval="10000">
+                    <img src="https://i.pinimg.com/originals/a3/26/41/a32641b0fe138cc36ff3ea9662a328fa.jpg" 
+                    class="img-fluid mx-auto d-block w-65" style="height:200px;" alt="...">
+                        <div class="carousel-caption d-none d-md-block">
+                            <em><h5 class="text-warning">Thanks for choosing us</h5></em>
+                        </div>
+                  </div>
+                  <div class="carousel-item" data-bs-interval="2000">
+                    <a href="{% url 'home_view' %}?discount">
+                        <img src="https://assets-global.website-files.com/6009ec8cda7f305645c9d91b/60107f5754fa61e28601c561_6002086f72b727a53001e37e_discounts-in-ecommerce-is-now-in-beta%2520(1)-p-1600.jpeg" 
+                        class="img-fluid mx-auto d-block w-100" style="height:200px" alt="...">
+                    </a>
+                    <div class="carousel-caption d-none d-md-block text-success">
+                        <a class="link-success" style="text-decoration:none;" href="{% url 'home_view' %}?discount">
+                        <em><h4 >Special Discount For you </h4>
+                        <p>here is some discount for you !!!Click here... Let's shop with us....</p></em></a>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <a href="{% url 'home_view' %}">
+                        <img src="https://images.unsplash.com/photo-1604118464816-5e2bd7b863c2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8c2hvcHBpbmclMjBiYWdzfGVufDB8fDB8fA%3D%3D&w=1000&q=80" class="img-fluid mx-auto d-block w-100" style="height:200px"alt="...">
+                    </a>
+                    <div class="carousel-caption d-none d-md-block text-light">
+                      <em><h4>Special Item For You</h4>
+                      <p >Here for you ...Let's shop with us...</p></em>
+                    </div>
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+        </div>
+        <div class="row ">
+            {% block category_items %}
+                {% include 'fragment/category.html' %}
+            {% endblock category_items %}
+        
+        </div>
+
+
+        <div class="row ">
+            {% block product_items %} 
+        
+            {% endblock product_items %}   
+        </div>
+       
+    </body>
+    <footer class="bg-warning"  style=" padding:15px; color : #F0F8FF;">
+        <div class="text-muted">
+            <div class="row" style="text-align:center;">
+                <div class="col ml-3 text-muted" >
+                    <em><a  href="https://www.amazon.sg/gp/help/customer/display.html?nodeId=201909000&ref_=footer_cou" style="padding-left:9px;color : #F0F8FF;text-decoration:none;">Condition of Use </a>
+                    <a href="https://www.amazon.sg/gp/help/customer/display.html?nodeId=201909010&ref_=footer_privacy" style="padding-left:9px;color : #F0F8FF;text-decoration:none;">Privacy Notice</a>
+                    <a href="https://www.amazon.sg/gp/help/customer/display.html?nodeId=202075050&ref_=footer_iba" style="padding-left:9px;color : #F0F8FF;text-decoration:none;">Interest-Based Ads</a></em>
+                </div>
+                <div class="text text-muted" style="">
+                    <h6 style = "color : #F0F8FF; ">&copy; Copyright 2022 HTML.am</h6>
+                </div>
+                
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        function Cart_test(){
+            alert("Cart is click")
+        }
+
+        function OpenModal(){
+            $("#exampleModalLong").modal('show');
+        }
+        function CloseModal(){
+            $("#exampleModalLong").modal('hide');
+        }
+    </script>
+</html>

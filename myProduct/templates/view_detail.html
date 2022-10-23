@@ -1,0 +1,92 @@
+{% extends 'myProduct/home_detail.html' %}
+{% block product_items %} 
+    
+
+<div class ="container">
+    <div class="row pt-5 pb-4">
+        <div class="col-4 ">
+            <img class="img-thumbnail float-end" src="{{product_details.product_img.url}}" class=" mx-auto d-block pt-2 " alt="{{product_details.name}}" style="width:250px;height:350px;" >
+    
+        </div>
+
+        <form class="col" action="{% url 'cacheData' id=product_details.pk %}" method = "post">
+            {% csrf_token %}
+            <ul class="list-group text-warning">
+                <li class="list-group-item border-0"><h3> {{product_details.name}} </h3></li>
+                {% if product_details.discount == 0 %}
+                    <li class="list-group-item border-0 " data-product_prize = {{product_details.price}} >{{product_details.price}} kyats</li>
+
+                {% else %}
+                    <li class="list-group-item border-0 " data-product_prize ={{product_details.Discount_price}} >
+                        <div class="text text-success"><em>Special Discount : {{product_details.discount}}% </em></div>
+                    </li>   
+                    <li class="list-group-item border-0" style="overflow: hidden;">
+                     {{product_details.Discount_price}} kyats <s style="color:red;font-size:13px;">  {{product_details.price}} kyats</s></li>
+                {% endif %}
+                <li class="list-group-item border-0">
+                    <p><blockquote>{{product_details.description}}</blockquote>
+                </li>
+                {% if product_details.instock  %}
+                <li class="list-group-item border-0" ><h6> Still Available Now </h6></li> 
+                <li class="list-group-item border-0 pt-3 "  >
+                    <ul class="list-group list-group-horizontal " style="list-style-type : none; height:40px;">
+                        <li class="btn btn-outline-dark border-0 btn-bg-dark border bg-warning " disabled="disabled" onclick="plus_item()" >
+                            <i class="fa-solid fa-plus"></i>
+                        </li>
+                        <li class="form-label btn " >
+                            <input type="text" id="item_val" name="qtyLabel" class="form-control input-number " style="width: 50px; border-bottom-width: 1px;padding-bottom: 3px;margin-bottom: 4px;" value="1"  >
+                        </li>
+                        <li class="btn btn-outline-dark border-0 btn-bg-dark border bg-warning btn-default  " disabled="disabled" onclick="minus_item()">
+                            <i class="fa-solid fa-minus "></i>
+                        </li>
+                    </ul>
+                </li>
+                <li class="list-group-item border-0">
+                    <div class="btn-group d-block m-lg-4">
+                        <button class="btn btn-warning text-light" type="submit"
+                        > Add to card</button>
+                    </div>
+                </li>                      
+                {% else %}
+                    <li class="list-group-item border-0" style="color:red;"> Sold out </li>
+                {% endif %}
+                    
+            </ul>
+        </div>      
+    </div>
+
+    <div class="link pb-4 link-warning" style="text-align:center;">
+        <a class = "link-warning" href="{% url 'home_view' %}"> <h6><em>Back to home </a>
+    </div>
+
+
+</div> 
+
+
+<script type="text/javascript">
+    function plus_item(){
+        var plus_btn = document.getElementById('item_val')
+        if(plus_btn.value < 20){
+            const current_val = parseInt(plus_btn.value)+1
+            plus_btn.value = current_val
+        }
+
+    }
+    function minus_item(){
+        var plus_btn = document.getElementById('item_val')
+        if(plus_btn.value > 1){
+            const current_val = parseInt(plus_btn.value)-1
+            plus_btn.value = current_val
+        }  
+    }
+    function add_to_card(){
+        var plus_btn = document.getElementById('item_val')
+        const current_val = parseInt(plus_btn.value)
+        console.log(current_val)
+        location.href = '{% url 'cacheData' id=product_details.pk  %}'
+    }
+    
+</script>
+    
+      
+{% endblock product_items %}

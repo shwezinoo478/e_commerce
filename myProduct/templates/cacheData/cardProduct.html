@@ -1,0 +1,66 @@
+{% extends 'myProduct/home_index.html' %}
+{% block category_items %}
+                
+{% endblock category_items %}
+
+{% block search_bar_drop %}
+    {% include 'fragment/search_no_drop.html' %}
+{% endblock search_bar_drop %}
+{% block product_items %} 
+{% if countCacheItem == 0 %}
+     <div class="container">No item is choosen Here! Please click <b>
+          <a href="{% url 'home_view' %}"> Add to Cart </a> </b></div>
+{% else %}
+
+     
+     <table class="table table-striped " style="margin-left:23px;text:#ffc107;margin-top: 23px;">
+          <thead>
+          <tr>
+          <th scope="col">id</th>
+          <th scope="col">Image</th>
+          <th scope="col">Name</th>
+          <th scope="col">Price</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Total Price</th>
+          <th></th>
+          </tr>
+          </thead>
+          <tbody>
+               <tr>
+               {% for cache_item in list_cache %}
+                    <tr>    
+                    {% for index,value in cache_item.items %}
+                         {% if index == "image" %}    
+                              <td><img src="{{value.url}}"
+                                   alt="{{value}}" class="rounded-circle" style="width:90px;height:80px;" >
+                              </td>
+                         {% else %}
+                              <td style="padding-top:25px;">{{value}}</td>
+                         {% endif %}
+                    
+                    {% endfor %}
+                    <td style="padding-top:25px;">
+                         <button type="button" class="btn btn-primary" data-toggle="button" aria-pressed="false" autocomplete="off"
+                         onclick="location.href = '{% url 'deleteKey' id=cache_item.id %}'">
+                              Cancel
+                         </button>
+                    </td>
+                    </tr>
+               {% endfor %}
+               <tr>
+                    <td colspan="5" class="text-end "><b>Total Amount </b></td>
+                    <td colspan="2">{{total}} kyats</td>
+               </tr>
+               
+          </tbody>
+     <table>
+
+          <div class="text text-dark " style="margin-left:23px;">
+               <h6>If you want to add more items <a href="{% url 'home_view' %}" style="text-decoration: none;" ><em> Click here..<i class="fa-solid fa-thumbs-up"></i></em></a> Or if your order is finished, click the below button....<i class="fa-solid fa-angles-down"></i></h6>
+          </div>
+     <div style="text-align:center;margin:23px;">
+          <button type="button" class="btn btn-warning" onclick="location.href='{% url 'customerInfo' %}'">Order Now</button>
+     </div>
+{% endif %}
+
+{% endblock product_items %}

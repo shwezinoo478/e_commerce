@@ -1,0 +1,76 @@
+<div class="d-flex flex-grow-1  " style="margin-left: 12px;">
+                                    
+    <div class="mr-2 my-auto w-100 d-inline-block order-1">  
+        <div class="input-group">
+            {% block drop_down_menu %}
+                <div class="dropdown" style="z-index: 10; position: relative;">
+                
+                    <button class="btn dropdown-toggle btn-outline-light btn-bg-dark border border-left-0" type="button" 
+                    id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <ul id="Menu_drop_down" class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="z-index: 10; position: relative;height: 400px;overflow-x: hidden; overflow-y: scroll;">
+                    
+                    </ul>
+                </div>
+            {% endblock drop_down_menu %}
+            <input type="text" id="search_bar" class="form-control border border-right-0 " value="" placeholder="Search more items..." 
+            onkeydown = "on_search(event)">
+            <span class="input-group-append">
+                <button class="btn btn-outline-light btn-bg-dark border border-left-0" type="button" 
+                onclick="on_search_but()">
+                    <i class="fa fa-search"></i>
+                </button>
+                
+            </span>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function on_search(e){
+        console.log(e.key)
+        if(e.key === "Enter" ){
+            console.log(e.target.value)
+            window.location.href = "{% url 'home_view' %}?q=" +e.target.value
+        }
+
+    }
+    function on_search_but(){
+        var x = document.getElementById("search_bar");
+        console.log(x.value)
+        window.location.href = "{% url 'home_view' %}?q=" +x.value
+    }
+    
+
+    async function load_category_drop(){
+        const dropDownList = document.getElementById("Menu_drop_down");
+        var CID = document.getElementById('cName').value;
+        try{
+            const response = await fetch("{% url 'get_category_item' %}")
+            const data = await response.json();
+            Object.keys(data).forEach(val => {
+                var cStyle = "background-color:#ffb906;color:white;margin-left:2px;margin-bottom:3px;white-space: nowrap;max-height: 22ch;";
+                if(CID == data[val]){
+                    cStyle = "background-color:#dbbd2c40;color:#ffb906;margin-left:2px;white-space: nowrap;max-height: 22ch;"
+                    
+                }
+
+
+                const item_drop = document.createElement('a');
+                item_drop.href = "{% url 'home_view' %}?category=" +data[val]
+                item_drop.className = "dropdown-item"
+                item_drop.style.cssText = cStyle
+                item_drop.innerHTML = val
+                dropDownList.append(item_drop)
+                
+              });
+           
+        }catch (error){
+            alert (error);
+        }
+    }
+    window.addEventListener('load' , (e)=>{
+        load_category_drop();
+    })
+
+</script>

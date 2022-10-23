@@ -1,0 +1,89 @@
+{% extends 'myProduct/home_index.html' %}
+{% block product_items %}
+{% csrf_token %}    
+    <div class="row pt-2">
+        <input type="hidden" value={{category_id_active}} id="cName">
+        
+        
+    {% if count == 0  %}
+    <div class="container bg-info bg-opacity-25 pb-4 mb-4">
+    
+        <div class="h2 text-warning mt-4" style="text-align:center;"><em>No item is available Now.....</em></div>
+        <div class="h3 text-warning " style="text-align:center;">_________________________________________________________</div>
+        <div class="h3 text-warning" style="text-align:center; ">
+            <a class="link link-warning"  style="text-decoration:none;" href="{% url 'home_view' %}">Search more here</a>
+        </div>
+    </div>
+    {% else %}
+        {% for product in products %}
+            <div class="col-2 pt-2 d-lg-block d-sm-flex ">
+                <div class="card border-warning" style="width: 14rem; height:24rem;  float: center; text-align: center" >
+                    <img src="{{product.product_img.url}}" class="rounded-circle mx-auto d-block pt-2 " alt="{{product.name}}"    style="width:130px;height:150px;" >
+                    <div class="card-body border-0">
+                        <h5 class="card-title border-0" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 20ch;">
+                           <b> {{product.name}} </b>
+                        </h5> 
+                        <ul class="list-group list-group-flush border-0 ">
+                            {% if product.discount == 0 %}
+                                <li class="list-group-item border-0">{{product.price}} kyats</li>
+
+                            {% else %}
+                                <li class="list-group-item border-0" style="overflow: hidden;">
+                                    {{product.Discount_price}} kyats <s style="color:red;font-size:11px;">{{product.price}} kyats</s></li>
+                            {% endif %}
+                            {% if product.instock  %}
+                                <li class="list-group-item border-0" ><h6> Available </h6></li>                       
+                            {% else %}
+                                <li class="list-group-item border-0" style="color:red;"> Sold out </li>
+                            {% endif %}
+                            <li class="list-group-item border-0">
+                                <a href="{% url 'get_product_details' id=product.pk %}" class="card-link link-warning" >
+                                   More Details here</a></li>     
+                        </ul>  
+                    </div>
+                    
+                </div>
+            </div>     
+        {% endfor %}
+    
+    </div>
+    <div class="row pt-4 ">
+        <div class="col-6  ">
+        <div class="page-item  pt-2 " style="float:right; margin-left:12px;">
+            
+            Page {{ products.number }} of {{ products.paginator.num_pages }}.
+            
+        </div>
+        </div>
+        <div class="col">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start-0 ">
+                {% if products.has_previous %}
+                    <li class="page-item btn-outline-success">
+                        <a class="page-link " href="?page=1">&laquo; first</a>
+                    </li>
+                    <li class="page-item ">
+                        <a class="page-link" href="?page={{ products.previous_page_number }}">previous</a>
+                    </li>
+                {% endif %}
+              
+                
+               {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.next_page_number }}">next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ products.paginator.num_pages }}">last &raquo;</a>
+                    </li>
+                {% endif %}
+              
+            </ul>
+            
+        </nav>
+    </div>
+    {% endif %}
+    </div>
+    
+{% endblock product_items %}
+
+        

@@ -1,0 +1,75 @@
+{% extends 'myProduct/home_index.html' %}
+{% block category_items %}
+                
+{% endblock category_items %}
+
+{% block search_bar_drop %}
+    {% include 'fragment/search_no_drop.html' %}
+{% endblock search_bar_drop %}
+{% block product_items %}
+<div class="row pb-5">
+    <div class="  card border-warning " style="width: 35rem;margin-left:400px;margin-top:21px;border: azure 2px groove;" >
+        <div class="row pb-2 bg-warning" style="margin-bottom:20px;">
+            <div class="col-3 ">
+            <img class="card-img-top img-fluid d-lg-block  d-sm-flex rounded-circle mt-2" src="https://freepikpsd.com/file/2019/10/logo-design-png-1-Transparent-Images.png" 
+            style="width:100px;height:80px;"  alt="Card image cap"></div>
+            <div class="col pt-4">
+                <div class="h4 text-white"><b><em>Thanks shopping with us</em>   </b><i class="far fa-grin-hearts"></i><i class="fal fa-hands-heart"></i></div>
+            </div>
+            
+        </div>
+        <div  class="card-title">
+            <div class="row container" style="font-size: 15px;color:dark;">
+                <div class="col-4 ">
+                    <em><i class="fas fa-pencil-alt"></i> {{customer.name}}</em>
+                </div>
+                <div class="col-4">
+                    <em><i class="fas fa-map-marker-alt"></i> {{customer.address}}</em>
+                </div>
+                <div class="col">
+                    <em> <i class="fas fa-mobile-android-alt"> </i> {{customer.phone}}</em>
+                </div>
+            
+        </div>
+        <div class="card-body">
+            <div class="row">
+            {% for order_item in order_list %}
+                <div class="row pb-4 " style="text:bold;">
+                    <div class="col-6">
+                        {{order_item.product_id.name}}
+                    </div>
+                    <div class="col-4">
+                        {{order_item.qty}} * {{order_item.price}}
+                    </div>
+                    <div class="col ">
+                        {{order_item.priceQty}}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+            <hr style="height:2px;border-width:0;color:#d79600ed;background-color:#f4b00e;">
+            <div class="row">
+                <div class="col-8 text-end">
+                    <b> Total  </b>
+                </div>
+                <div class="col"  style="padding-left:70px;">
+                     <b>{{total}}</b><em> kyats</em>
+                </div>
+            </div>
+            <div class="btn pt-4 pb-2" style="text-align:center;">
+                <em> Now your ordering progress is finished ....We will serve all the best &#10084; &#10084; &#10084;</em>
+            </div>
+        </div>
+
+        
+        
+    </div>
+
+    
+</div>
+<div class="btn pt-3 text-warning" style="text-align:center;">
+    <a class="btn text-white bg-warning" href="{% url 'cacheClear' %}" style="text-decoration:none;"><b>Back to home page</b> </a>
+</div>
+
+
+{% endblock product_items %}

@@ -1,0 +1,109 @@
+{% extends 'myProduct/home_index.html' %}
+
+{% block category_items %}
+                
+{% endblock category_items %}
+
+{% block search_bar_drop %}
+    {% include 'fragment/search_no_drop.html' %}
+{% endblock search_bar_drop %}
+{% block product_items %} 
+<div class="container m-3 p-2">
+    <form method="post" action="{% url 'customerDetails' %}">
+        {% csrf_token %}
+        <div class="">
+            <input type="name" class="form-control" name="name" aria-describedby="emailHelp" placeholder="Enter Your Name" required>
+        </div>
+        <div class=" pt-3">
+            <input type="email" class="form-control" name="email"  aria-describedby="emailHelp" placeholder="Enter your email" required>
+        </div>
+        <div class=" pt-3">
+            <input type="tel" pattern="0[0-9]{1,}-[0-9]{4,}" class="form-control" name="phone" placeholder="Enter your phone number (09-456777***)" required>
+        </div>
+        <div class="row pt-3">
+            <div class="col-3">
+                <select class="form-select" aria-label="Default select example" name="region" id="region_id" onchange="city_detail_list()">
+                    <option selected disabled>Please select the region first</option>
+                </select>
+            </div>
+            <div class="col-3">
+                <select class="form-select" aria-label="Default select example" name="city" id="detail_id">
+                    <option selected disabled>City Name</option>
+                </select>
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" name="street_no" placeholder="Enter your street no & home no in detail " required>
+            </div>
+        </div>
+        
+        <div class="pt-3" style="text-align:center;">
+            <button type="submit" class="btn btn-warning ">Submit</button>
+        </div>
+    </form>
+</div>
+
+
+<script>
+    $(document).ready(function(){
+        $.get("https://raw.githubusercontent.com/yathit/myanmar-township/master/myanmar-townships.json", function(data){
+            const myobj = JSON.parse(data);
+            
+            const u = JSON.parse(JSON.stringify(myobj));
+            for (const [index,city] of Object.entries(myobj)){
+                console.log(index)
+                document.getElementById("region_id").innerHTML += "<option>"+index+"</option>";
+            }
+                
+                        
+            // //   for(let j in myobj){
+            // //     console.log(j);
+            // //   }
+        });
+    });
+
+    function city_detail_list(){
+        console.log("Changing")
+        var city_select = document.getElementById("region_id").value
+        console.log("*******************************************************************************************")
+        console.log(city_select)
+        $.ajax({
+            url: "https://raw.githubusercontent.com/yathit/myanmar-township/master/myanmar-townships.json",
+            async : false, 
+            cache : true,
+            dataType: 'json',
+            success: function(data){
+                console.log(typeof(data))
+                console.log(data)
+                document.getElementById("detail_id").innerHTML = "";
+                for (const [index,city] of Object.entries(data)){
+                    console.log(index);
+                    if(index == city_select){
+                        console.log("found the selected city")
+                        for(const [ind,city_detail] of Object.entries(city)){
+                            document.getElementById("detail_id").innerHTML += "<option>"+ind+"</option>";
+                            console.log(ind)
+                            for (const l in city_detail){
+                                if(ind == city_detail[l]){
+                                    continue
+                                }else{
+                                    document.getElementById("detail_id").innerHTML += "<option>"+city_detail[l]+"</option>";
+                                    console.log(city_detail[l])
+                                }
+                                
+                            }
+                            
+                        }
+                    break
+                }
+                    console.log("***************************************************")
+            }
+
+
+                
+                
+        }});
+
+    }
+
+</script>
+{% endblock product_items %}
